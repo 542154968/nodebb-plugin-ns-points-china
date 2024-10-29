@@ -2,15 +2,14 @@
 @import "_vars";
 
 .points-container {
-
   .row {
-    margin-bottom: @line-margin;
+    margin-bottom: $line-margin;
   }
 
   .points-avatar {
     position: relative;
-    width: @avatar-size;
-    height: @avatar-size;
+    width: $avatar-size;
+    height: $avatar-size;
     padding: 0;
     flex-shrink: 0;
 
@@ -23,11 +22,11 @@
     .icon-thumbnail {
       width: 100%;
       height: 100%;
-      line-height: @avatar-size;
-      font-size: @ns-points-avatar-font-size;
+      line-height: $avatar-size;
+      font-size: $ns-points-avatar-font-size;
       border-radius: 50%;
       text-align: center;
-      color: fade(@color-light, 87%);
+      color: fade($color-light, 87%);
     }
 
     span {
@@ -36,19 +35,19 @@
       right: 0;
       text-align: center;
       border-radius: 50%;
-      width: @ns-points-badge-size;
-      height: @ns-points-badge-size;
-      line-height: @ns-points-badge-size;
-      font-size: @ns-points-badge-font-size;
-      font-weight: @font-normal;
-      color: fade(@color-light, 90%);
-      background: fade(@color-dark, 87%);
+      width: $ns-points-badge-size;
+      height: $ns-points-badge-size;
+      line-height: $ns-points-badge-size;
+      font-size: $ns-points-badge-font-size;
+      font-weight: $font-normal;
+      color: fade($color-light, 90%);
+      background: fade($color-dark, 87%);
     }
   }
 
   .points-stats {
     flex: 1;
-    margin-left: @block-margin;
+    margin-left: $block-margin;
     min-width: 0;
 
     .points-numbers {
@@ -62,8 +61,8 @@
     }
 
     .progress {
-      height: @progress-height;
-      margin: @padding-s 0;
+      height: $progress-height;
+      margin: $padding-s 0;
     }
   }
 
@@ -72,8 +71,8 @@
   }
 
   .points-user-name {
-    font-weight: @font-narrow;
-    font-size: @username-size;
+    font-weight: $font-narrow;
+    font-size: $username-size;
 
     display: block;
     overflow: hidden;
