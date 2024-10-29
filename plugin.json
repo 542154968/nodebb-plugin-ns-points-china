@@ -54,15 +54,11 @@
       "method": "hooks.statics.userDelete"
     }
   ],
-  "less": [
-    "style/client.less"
-  ],
-  "acpScripts": [
-    "public/js/acp.js"
-  ],
-  "scripts": [
-    "public/js/overview.js"
-  ],
+  "scss": ["style/client.scss"],
+  "modules": {
+    "../admin/plugins/points.js": "./public/js/acp.js",
+    "../client/points/overview.js": "./public/js/overview.js"
+  },
   "staticDirs": {
     "css": "./public/css",
     "templates": "./public/templates",
