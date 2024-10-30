@@ -40,12 +40,29 @@
    * 快速回复时触发的钩子
    */
   hooks.on("action:quickreply.success", data => {
-    alerts.success(
-      `回复成功，积分 ${
-        settingData.postWeight ? `+${settingData.postWeight}` : "增加了"
-      }！`,
-      MSG_DURATION
-    );
+    settingData.postWeight &&
+      alerts.success(
+        `回复成功，积分 +${settingData.postWeight}！`,
+        MSG_DURATION
+      );
+  });
+
+  /**
+   * 点赞时触发的钩子
+   */
+
+  hooks.on("action:post.toggleVote", data => {
+    if (settingData.reputationActionWeight) {
+      data.unvote
+        ? alerts.success(
+            `取消点赞，积分 -${settingData.reputationActionWeight}！`,
+            MSG_DURATION
+          )
+        : alerts.success(
+            `点赞成功，积分 +${settingData.reputationActionWeight}！`,
+            MSG_DURATION
+          );
+    }
   });
 
   /**
@@ -54,19 +71,17 @@
   $(window).on("action:composer.submit", function (ev, data) {
     // 如果是发帖
     if (data.action === "topics.post") {
-      alerts.success(
-        `发帖成功，积分 ${
-          settingData.topicWeight ? `+${settingData.topicWeight}` : "增加了"
-        }！`,
-        MSG_DURATION
-      );
+      settingData.topicWeight &&
+        alerts.success(
+          `发帖成功，积分 +${settingData.topicWeight}！`,
+          MSG_DURATION
+        );
     } else if (data.action === "posts.reply") {
-      alerts.success(
-        `回复成功，积分 ${
-          settingData.postWeight ? `+${settingData.postWeight}` : "增加了"
-        }！`,
-        MSG_DURATION
-      );
+      settingData.postWeight &&
+        alerts.success(
+          `回复成功，积分 +${settingData.postWeight}！`,
+          MSG_DURATION
+        );
     }
   });
 })();
