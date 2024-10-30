@@ -79,8 +79,33 @@
       from,
     };
     // 将日志记录到数据库或其他存储介质
-    db.setObject(`${constants.LOG_NAMESPACE}:${uid}`, logEntry, err => {
-      console.log("error", err);
-    });
+    // setObject会覆盖原有的存储信息
+    db.getObjectField(
+      `${constants.LOG_NAMESPACE}:${uid}`,
+      "pointLogs",
+      (err, logs) => {
+        if (err) {
+          console.error("Error getting points change logs:", err);
+          return;
+        }
+        if (!logs) {
+          logs = "";
+        }
+        // 添加新的日志条目
+        logs += `; ${JSON.stringify(logEntry)}`;
+
+        // 更新日志条目
+        db.setObjectField(
+          `${constants.LOG_NAMESPACE}:${uid}`,
+          "pointLogs",
+          logs,
+          err => {
+            if (err) {
+              console.error("Error adding points change log:", err);
+            }
+          }
+        );
+      }
+    );
   };
 })(module.exports);
