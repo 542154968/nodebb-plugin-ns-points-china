@@ -5,7 +5,7 @@
 
   const settings = require("./settings"),
     database = require("./database");
-  const { sendNotification } = require("./notify");
+  // const { sendNotification } = require("./notify");
 
   const debug = function (id, delta, total) {
     console.log(
@@ -16,17 +16,25 @@
     );
   };
 
-  const groupChange = function (users, done) {
+  const groupChange = function (users, done, from) {
     async.each(
       users,
       function (user, next) {
-        incrementPoints(user.uid, user.points, next);
+        incrementPoints(user.uid, user.points, from, next);
       },
       done
     );
   };
 
-  const incrementPoints = function (uid, increment, done) {
+  /**
+   *
+   * @param {number} uid 用户id
+   * @param {number} increment 增加的积分
+   * @param {'post' | 'topic' | 'unvote' | 'upvote'} from 来源
+   * @param {()=>{}} [done] 回调函数
+   * @returns
+   */
+  const incrementPoints = function (uid, increment, from, done) {
     done = done || (() => undefined);
     if (uid <= 0) {
       done(null);
@@ -47,6 +55,7 @@
       // } catch (error) {
       //   console.log("notify失败了", error);
       // }
+      database.addPointsChangeLog(uid, increment, points, from);
 
       done(null);
     });
@@ -58,7 +67,7 @@
    */
   Action.postSave = function (postData) {
     var value = settings.get().postWeight;
-    incrementPoints(postData.post.uid, value);
+    incrementPoints(postData.post.uid, value, "post");
   };
 
   /**
@@ -78,7 +87,8 @@
           if (error) {
             console.error(error);
           }
-        }
+        },
+        "unvote"
       );
     }
   };
@@ -93,7 +103,8 @@
         if (error) {
           console.error(error);
         }
-      }
+      },
+      "upvote"
     );
   };
 
@@ -103,6 +114,6 @@
    */
   Action.topicSave = function (topicData) {
     let value = settings.get().topicWeight;
-    incrementPoints(topicData.topic.uid, value);
+    incrementPoints(topicData.topic.uid, value, "topic");
   };
 })(module.exports);
