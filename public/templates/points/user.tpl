@@ -1,26 +1,16 @@
-<div class="points-user" data-points="{points}">
-    <div class="points-avatar">
-        <a href="<!-- IF userslug -->{relative_path}/user/{userslug}<!-- ELSE -->#<!-- ENDIF userslug -->">
-            <!-- IF picture -->
-            <img src="{picture}" class="img-thumbnail" />
-            <!-- ELSE -->
-            <div class="icon-thumbnail" style="background-color: {icon:bgColor};">{icon:text}</div>
-            <!-- ENDIF picture -->
-        </a>
-        <span class="rank">{rank}</span>
+<a class="btn btn-ghost gap-2 ff-base d-flex align-items-start justify-content-start p-2 text-start" data-points="{points}" href="<!-- IF userslug -->{relative_path}/user/{userslug}<!-- ELSE -->#<!-- ENDIF userslug -->">
+    <span class="avatar flex-shrink-0 avatar-rounded" style="--avatar-size: 48px;background-color: {icon:bgColor};">
+        <!-- IF picture -->
+        <img src="{picture}" class="img-thumbnail" />
+        <!-- ELSE -->
+        {icon:text}
+        <!-- ENDIF picture -->
+    </span>
+    
+    <div class="d-flex flex-column gap-1 text-truncate">
+        <div class="fw-semibold text-truncate" title="{username}" >{username}</div>
+        <div class="text-xs text-muted text-truncate" clapoints-user-namess="points-numbers">等级: {rank}</div>
+        <div class="text-xs text-muted text-truncate" clapoints-user-namess="points-numbers">积分: {points}</div>
+        <div class="text-xs text-muted text-truncate">升级还需: {upgradeRequiredPoints} 积分</div>
     </div>
-    <div class="points-stats">
-        <div class="points-user-info">
-            <a class="points-user-name" href="{relative_path}/user/{userslug}">{username}</a>
-            <small class="points-numbers">Points: {points}</small>
-            <small class="rank-progress">Progress: {rankProgress}</small>
-        </div>
-        <div class="progress">
-            <div class="progress-bar progress-bar-success" role="progressbar"
-                 aria-valuenow="{progress}"
-                 aria-valuemin="0"
-                 aria-valuemax="100" style="width:{progress}%">
-            </div>
-        </div>
-    </div>
-</div>
+</a>

@@ -2,7 +2,7 @@
   "use strict";
 
   const async = require("async");
-
+  const meta = require.main.require("./src/meta");
   const actions = require("./actions"),
     controller = require("./controller"),
     files = require("./files"),
@@ -18,7 +18,6 @@
       load: function (params, callback) {
         var router = params.router,
           middleware = params.middleware,
-          controllers = params.controllers,
           pluginUri = "/admin/plugins/points",
           renderAdmin = function (req, res, next) {
             res.render(pluginUri.substring(1), {});
@@ -31,7 +30,8 @@
               res.render("points/overview", payload);
             });
           };
-
+        meta.notifications?.types?.push("nodebb-plugin-points-notify");
+        console.log("meta", meta.notifications);
         router.get(pluginUri, middleware.admin.buildHeader, renderAdmin);
         router.get("/api" + pluginUri, renderAdmin);
 

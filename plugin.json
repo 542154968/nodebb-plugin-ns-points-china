@@ -59,6 +59,7 @@
     "../admin/plugins/points.js": "./public/js/acp.js",
     "../client/points/overview.js": "./public/js/overview.js"
   },
+  "scripts": ["./public/js/client-main.js"],
   "staticDirs": {
     "css": "./public/css",
     "templates": "./public/templates",
