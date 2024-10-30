@@ -2,12 +2,21 @@
 
 Additional metrics for User Profiles. It's like experience in video games. Plugin is good for gamification of your board.
 
-![Version](https://img.shields.io/npm/v/nodebb-plugin-ns-points.svg)
-![Dependencies](https://david-dm.org/NicolasSiver/nodebb-plugin-ns-points.svg)
+## 我做的改动
+
+1. 优化积分管理页面和积分排行榜的布局样式
+2. 兼容`NodeBB v3`版本
+3. 点赞、发帖、回复时增加`alert`提示
+4. 增加积分变动日志记录
+5. 用户主页增加积分和等级字段
+6. 文案改为中文
+
+![演示1](./readme-static/eg.png)
+![演示2](./readme-static/eg-1.png)
+![演示3](./readme-static/eg-2.png)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
- 
 
 - [The Ranking Calculation](#the-ranking-calculation)
 - [Themes](#themes)
@@ -39,17 +48,15 @@ If you want points in Profile, do very basic changes to your theme:
 
 > Example: Persona Theme, `v4`, find `templates/account/profile.tpl`, edit template in package directory - `node_modules`
 
-Find block that is responsible for [stats](https://github.com/NodeBB/nodebb-theme-persona/blob/4c32d4b0b16711bde6ee84d6b18dfb13dbfc24c0/templates/account/profile.tpl#L14-L41), and insert template where you want: 
+Find block that is responsible for [stats](https://github.com/NodeBB/nodebb-theme-persona/blob/4c32d4b0b16711bde6ee84d6b18dfb13dbfc24c0/templates/account/profile.tpl#L14-L41), and insert template where you want:
 
 ```html
 <div class="account-stats">
+  ...
 
-    ...
+  <!-- IMPORT partials/points_profile.tpl -->
 
-    <!-- IMPORT partials/points_profile.tpl -->
-    
-    ...
-
+  ...
 </div>
 ```
 
