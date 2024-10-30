@@ -8,7 +8,8 @@
     files = require("./files"),
     filters = require("./filters"),
     settings = require("./settings"),
-    sockets = require("./sockets");
+    sockets = require("./sockets"),
+    Ranking = require("./default-ranking");
 
   //NodeBB list of Hooks: https://github.com/NodeBB/NodeBB/wiki/Hooks
   Plugin.hooks = {
@@ -51,6 +52,28 @@
 
       userDelete: function ({ uid }, callback) {
         controller.deleteUser(uid, callback);
+      },
+
+      /**
+       * 用户主页设置显示积分和等级
+       * @param {*} hookData
+       * @returns
+       */
+      filterAccountProfileBuild: async function (hookData) {
+        if (hookData.templateData) {
+          const uid = hookData.templateData.uid;
+          if (uid) {
+            const points = await controller
+              .getUserPointsByUid(uid)
+              .catch(() => {});
+            const settingData = settings.get();
+            hookData.templateData.points = points || 0;
+            const rankData = Ranking.compute(settingData, points || 0);
+            hookData.templateData.level = rankData.rank;
+          }
+        }
+
+        return hookData;
       },
     },
   };

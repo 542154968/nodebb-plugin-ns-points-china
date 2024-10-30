@@ -164,4 +164,20 @@
       done
     );
   };
+
+  /**
+   * 获取用户的积分
+   * @param {*} uid
+   * @returns {Promise}
+   */
+  Controller.getUserPointsByUid = function (uid) {
+    return new Promise((resolve, reject) => {
+      database.getPoints(uid, (error, points) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve(points);
+      });
+    });
+  };
 })(module.exports);
