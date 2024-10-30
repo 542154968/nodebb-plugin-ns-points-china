@@ -67,7 +67,8 @@
   "staticDirs": {
     "css": "./public/css",
     "templates": "./public/templates",
-    "js": "./public/js"
+    "js": "./public/js",
+    "images": "./public/images"
   },
   "templates": "./public/templates"
 }

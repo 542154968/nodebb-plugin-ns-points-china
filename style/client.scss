@@ -9,6 +9,32 @@
     align-items: center;
     justify-content: center;
   }
+
+  & > a.btn {
+    position: relative;
+    &:nth-child(1),
+    &:nth-child(2),
+    &:nth-child(3) {
+      &::before {
+        position: absolute;
+        content: "";
+        width: 30px;
+        height: 30px;
+        background-image: url("/plugins/nodebb-plugin-ns-points-china/images/gold.png");
+        z-index: 1;
+        background-size: cover;
+        border-radius: 50%;
+        top: 65px;
+        left: 16px;
+      }
+    }
+    &:nth-child(2)::before {
+      background-image: url("/plugins/nodebb-plugin-ns-points-china/images/silver.png");
+    }
+    &:nth-child(3)::before {
+      background-image: url("/plugins/nodebb-plugin-ns-points-china/images/bronze.png");
+    }
+  }
 }
 
 // .points-container {
