@@ -13,13 +13,62 @@
 (async () => {
   const hooks = await app.require("hooks");
   const alerts = await app.require("alerts");
+  /**
+   * 积分增长规则
+   */
+  let settingData = {};
+  /**
+   * 积分增加提示消息
+   */
+  const MSG_DURATION = 2000;
 
-  hooks.on("action:post.save action:topic.save", () => {
-    alerts.success("恭喜您，积分增加了！", 2000);
+  // 拉取积分设置
+  window.socket.emit(
+    // 来源于client/acp/model/socket-api.js
+    "plugins.ns-points.getCalculationProperties",
+    {},
+    (error, settings) => {
+      if (error) {
+        //App.alertError(error.message);
+        return;
+      }
+      settingData = settings;
+      console.log(settings, "设置的set");
+    }
+  );
+
+  /**
+   * 快速回复时触发的钩子
+   */
+  hooks.on("action:quickreply.success", data => {
+    alerts.success(
+      `回复成功，积分 ${
+        settingData.postWeight ? `+${settingData.postWeight}` : "增加了"
+      }！`,
+      MSG_DURATION
+    );
   });
 
-  hooks.on("action:ajaxify.end", (/* data */) => {
-    // called everytime user navigates between pages including first load
+  /**
+   * 点击富文本提交时触发的钩子
+   */
+  $(window).on("action:composer.submit", function (ev, data) {
+    // 如果是发帖
+    if (data.action === "topics.post") {
+      alerts.success(
+        `发帖成功，积分 ${
+          settingData.topicWeight ? `+${settingData.topicWeight}` : "增加了"
+        }！`,
+        MSG_DURATION
+      );
+    } else if (data.action === "posts.reply") {
+      alerts.success(
+        `回复成功，积分 ${
+          settingData.postWeight ? `+${settingData.postWeight}` : "增加了"
+        }！`,
+        MSG_DURATION
+      );
+    }
   });
 })();
 
