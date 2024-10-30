@@ -33,7 +33,6 @@
         return;
       }
       settingData = settings;
-      console.log(settings, "设置的set");
     }
   );
 
