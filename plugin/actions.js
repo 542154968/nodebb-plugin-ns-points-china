@@ -34,6 +34,11 @@
      * @param postData {object} Post with signature - { pid:3, uid:1, tid:'1', content:'text', timestamp:1429974406764, reputation:0, votes: 0, edited: 0, deleted: 0, cid:2 }
      */
     Action.postSave = function (postData) {
+        // When creating a new topic, both the postSave and topicSave events are triggered, resulting in the points being increased twice. In this scenario, we need to filter out the points increase triggered by postSave.
+        if (postData.post.isMain) {
+            return;
+        }
+
         var value = settings.get().postWeight;
         incrementPoints(postData.post.uid, value);
     };
