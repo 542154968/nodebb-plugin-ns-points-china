@@ -7,7 +7,7 @@ Additional metrics for User Profiles. It's like experience in video games. Plugi
 1. 优化积分管理页面和积分排行榜的布局样式
 2. 兼容`NodeBB v3`版本
 3. 点赞、发帖、回复时增加`alert`提示
-4. 增加积分变动日志记录
+4. 增加积分变动日志记录，点击用户主页积分可以查看
 5. 用户主页增加积分和等级字段
 6. 文案改为中文
 
