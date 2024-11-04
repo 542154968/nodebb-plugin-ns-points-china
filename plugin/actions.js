@@ -66,7 +66,12 @@
    * @param postData {object} Post with signature - { pid:3, uid:1, tid:'1', content:'text', timestamp:1429974406764, reputation:0, votes: 0, edited: 0, deleted: 0, cid:2 }
    */
   Action.postSave = function (postData) {
-    var value = settings.get().postWeight;
+    // 说明是topic 不是post
+    if (postData.post.isMain) {
+      return;
+    }
+
+    const value = settings.get().postWeight;
     incrementPoints(postData.post.uid, value, "post");
   };
 
