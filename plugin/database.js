@@ -65,46 +65,58 @@
 
   /**
    *
-   * @param {*} uid
-   * @param {*} increment
-   * @param {*} newScore
+   * @param {string} uid
+   * @param {number} points
+   * @param {number} countPoints
    * @param {'post' | 'topic' | 'unvote' | 'upvote'} from 来源
    */
-  Database.addPointsChangeLog = (uid, increment, newScore, from) => {
-    const logEntry = {
+  Database.addPointsChangeLog = (uid, points, countPoints, from) => {
+    const logData = {
+      // 时间
       timestamp: new Date().getTime(),
+      // 用户id
       userId: uid,
-      increment: increment,
-      newScore: newScore,
+      // 当前积分
+      points,
+      // 积分总数
+      countPoints,
+      // 增加还是减少
+      action: points > 0 ? "increment" : "decrement",
+      // 变动来源
       from,
     };
-    // 将日志记录到数据库或其他存储介质
-    // setObject会覆盖原有的存储信息
-    db.getObjectField(
-      `${constants.LOG_NAMESPACE}:${uid}`,
-      "pointLogs",
-      (err, logs) => {
-        if (err) {
-          console.error("Error getting points change logs:", err);
-          return;
-        }
-        if (!logs) {
-          logs = "";
-        }
-        // 添加新的日志条目
-        logs += `; ${JSON.stringify(logEntry)}`;
+    const stringLogData = JSON.stringify(logData);
 
-        // 更新日志条目
-        db.setObjectField(
-          `${constants.LOG_NAMESPACE}:${uid}`,
-          "pointLogs",
-          logs,
-          err => {
-            if (err) {
-              console.error("Error adding points change log:", err);
-            }
-          }
-        );
+    /**
+     * gpt 推荐这样分开存储
+     * 优点
+     * 高效查询：通过为每个用户创建独立的有序集合，可以快速查询特定用户的积分日志。
+     * 灵活性：主有序集合可以用于全局查询，用户有序集合用于特定用户的查询。
+     * 注意事项
+     * 键名管理：确保 constants.LOG_NAMESPACE 和用户ID的组合键名唯一且易于管理。
+     * 数据冗余：每个日志记录在主有序集合和用户有序集合中各存储一次，可能会增加存储开销，但提高了查询效率。
+     */
+
+    // 将日志记录到数据库或其他存储介质 作为总数据
+    db.sortedSetAdd(
+      constants.LOG_NAMESPACE,
+      logData.timestamp,
+      stringLogData,
+      err => {
+        if (err) {
+          console.error("Error adding points change log:", err);
+        }
+      }
+    );
+    // 记录单个用户的日志变动数据
+    db.sortedSetAdd(
+      `${constants.LOG_NAMESPACE}:${uid}`,
+      logData.timestamp,
+      stringLogData,
+      err => {
+        if (err) {
+          console.error("Error adding points change log:", err);
+        }
       }
     );
   };
