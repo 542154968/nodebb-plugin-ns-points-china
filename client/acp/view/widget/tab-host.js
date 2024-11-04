@@ -28,7 +28,7 @@ class TabHost extends React.Component {
   render() {
     return (
       <div className='tab-host'>
-        <ul className='nav nav-tabs'>
+        <ul className='nav nav-tabs' style={{ marginBottom: "20px" }}>
           {this.props.sections.map(section => {
             let liClass = classNames({
               active: this.props.section === section.value,
