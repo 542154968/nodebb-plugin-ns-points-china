@@ -32,13 +32,33 @@
             });
           };
         meta.notifications?.types?.push("nodebb-plugin-points-notify");
-        console.log("meta", meta.notifications);
         router.get(pluginUri, middleware.admin.buildHeader, renderAdmin);
+        // 这个是请求接口
         router.get("/api" + pluginUri, renderAdmin);
 
         // Overview Page
         router.get("/points", middleware.buildHeader, renderOverviewSection);
+        // 这个是请求接口
         router.get("/api/points", renderOverviewSection);
+
+        router.get("/api/points/user", async (req, res, next) => {
+          try {
+            const { uid, page = 1, resultsPerPage = 50 } = req.query;
+            console.log("uid", uid, typeof uid);
+            const numUid = Number(uid);
+            if (numUid <= 0 || isNaN(numUid)) {
+              return res.status(500).json("[[error:invalid-url]]");
+            }
+            const datas = await controller.getUserPointsLogsByUid(
+              numUid,
+              page,
+              resultsPerPage
+            );
+            res.json(datas);
+          } catch (error) {
+            return res.status(500).json(error);
+          }
+        });
 
         async.parallel(
           {
