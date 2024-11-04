@@ -68,7 +68,6 @@ const pointsConrtoller = {
    * @returns
    */
   renderClientUserPointsPage: async (req, res, next) => {
-    console.log(req.query, "开始请求");
     try {
       const { uid, page = 1 } = req.query;
       const resultsPerPage = 10;
@@ -99,7 +98,7 @@ const pointsConrtoller = {
         }),
       });
     } catch (error) {
-      console.log("出错了", error);
+      console.log("查询日志出错了", error);
       return res.status(500).json(error);
     }
   },
