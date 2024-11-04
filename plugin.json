@@ -1,6 +1,6 @@
 {
-  "id": "nodebb-plugin-ns-points",
-  "name": "NodeBB Points",
+  "id": "nodebb-plugin-ns-points-china",
+  "name": "NodeBB Points China",
   "description": "Additional metrics for User Profiles. It's like experience in video games. Plugin is good for gamification of your board.",
   "url": "https://github.com/NicolasSiver/nodebb-plugin-ns-points",
   "library": "./plugin/index.js",
