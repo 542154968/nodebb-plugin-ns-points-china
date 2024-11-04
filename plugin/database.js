@@ -77,7 +77,7 @@ dataBase.addPointsChangeLog = (uid, points, countPoints, from) => {
     timestamp: new Date().getTime(),
     // 用户id
     userId: uid,
-    // 当前积分
+    // 当前变动的积分数量
     points,
     // 积分总数
     countPoints,
@@ -137,7 +137,6 @@ dataBase.getUserPointsLogsByUid = async (
   const start = (page - 1) * resultsPerPage;
   const stop = start + resultsPerPage - 1;
   const NAME_SPCAE = `${constants.LOG_NAMESPACE}:${uid}`;
-  console.log("开始查", NAME_SPCAE, start, stop);
   const [list = [], total = 0] = await Promise.all([
     db.getSortedSetRevRangeWithScores(NAME_SPCAE, start, stop),
     dataBase.countSet(NAME_SPCAE),
