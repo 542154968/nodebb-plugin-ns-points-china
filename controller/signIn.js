@@ -17,8 +17,6 @@ const signInConrtoller = {
       return;
     }
     const index = await controller.getUserSignInStatusByDate(uid);
-    const dates = controller.getUserSignInDates();
-    console.log(dates, "!!!");
     const isSignIn = index !== -1;
     res.json({
       isSignIn,
@@ -36,7 +34,6 @@ const signInConrtoller = {
     if (index === -1) {
       await action.signIn(uid);
       index = await controller.getUserSignInStatusByDate(uid);
-
       const isSignIn = index !== -1;
       res.json({
         isSignIn,
