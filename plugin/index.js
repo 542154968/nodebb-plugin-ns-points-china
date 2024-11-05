@@ -87,7 +87,7 @@ plugin.hooks = {
      * @param {*} hookData
      * @returns
      */
-    filterAccountProfileBuild: async function (hookData) {
+    filterAccountProfileBuild: async hookData => {
       if (hookData.templateData) {
         const uid = hookData.templateData.uid;
         if (uid) {
@@ -100,6 +100,27 @@ plugin.hooks = {
           hookData.templateData.level = rankData.rank;
         }
       }
+
+      return hookData;
+    },
+    /**
+     * 将用户等级塞入到 帖子列表中的用户信息中
+     * @param {*} hookData
+     * @returns
+     */
+    filterPostsGetUserInfoForPosts: async hookData => {
+      // 使用 Promise.all 等待所有异步操作完成
+      hookData.users = await Promise.all(
+        hookData.users.map(async user => {
+          const points = await controller.getUserPointsByUid(user.uid);
+          const settingData = settings.get();
+          const rankData = Ranking.compute(settingData, points || 0);
+          return {
+            ...user,
+            level: rankData.rank,
+          };
+        })
+      );
 
       return hookData;
     },

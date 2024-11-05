@@ -56,6 +56,10 @@
     {
       "hook": "filter:account/profile.build",
       "method": "hooks.statics.filterAccountProfileBuild"
+    },
+    {
+      "hook": "filter:posts.getUserInfoForPosts",
+      "method": "hooks.statics.filterPostsGetUserInfoForPosts"
     }
   ],
   "scss": ["style/client.scss"],
@@ -63,7 +67,11 @@
     "../admin/plugins/points.js": "./public/js/acp.js",
     "../client/points/overview.js": "./public/js/overview.js"
   },
-  "scripts": ["./public/js/client-main.js", "./public/js/user-account.js"],
+  "scripts": [
+    "./public/js/client-main.js",
+    "./public/js/user-account.js",
+    "./public/js/topic.js"
+  ],
   "staticDirs": {
     "css": "./public/css",
     "templates": "./public/templates",
