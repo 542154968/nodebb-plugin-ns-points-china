@@ -11,6 +11,9 @@ Additional metrics for User Profiles. It's like experience in video games. Plugi
 5. 用户主页增加积分和等级字段
 6. 文案改为中文
 7. 记得在后台控制面板中将积分榜添加到导航栏中
+8. 签到获取积分
+9. topic 主题页显示用户等级
+10. 排行榜显示当前用户的排名
 
 ![演示1](./readme-static/eg.png)
 ![演示2](./readme-static/eg-1.png)
