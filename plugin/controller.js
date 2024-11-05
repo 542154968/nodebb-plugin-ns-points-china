@@ -121,6 +121,7 @@ controller.saveCalculationProperties = function (payload, done) {
     "reputationActionWeight",
     "basePoints",
     "baseGrow",
+    "baseSignInPoints",
   ];
   async.waterfall(
     [
@@ -201,6 +202,26 @@ controller.getUserPointsLogsByUid = async function (
     };
   }
   return await database.getUserPointsLogsByUid(uid, page, resultsPerPage);
+};
+
+/**
+ * 查询用户今日签到情况
+ * @param {*} uid
+ * @param {*} date
+ * @returns {Promise<number>}
+ */
+controller.getUserSignInStatusByDate = async (uid, date = new Date()) => {
+  if (!uid) {
+    return Promise.reject("没有实际用户存在");
+  }
+  return await database.getUserSignInStatusByDate(uid, date);
+};
+
+controller.getUserSignInDates = async uid => {
+  if (!uid) {
+    return Promise.reject("没有实际用户存在");
+  }
+  return await database.getUserSignInDates(uid);
 };
 
 module.exports = controller;

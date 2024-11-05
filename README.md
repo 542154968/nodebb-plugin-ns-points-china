@@ -10,6 +10,7 @@ Additional metrics for User Profiles. It's like experience in video games. Plugi
 4. 增加积分变动日志记录，点击用户主页积分可以查看
 5. 用户主页增加积分和等级字段
 6. 文案改为中文
+7. 记得在后台控制面板中将积分榜添加到导航栏中
 
 ![演示1](./readme-static/eg.png)
 ![演示2](./readme-static/eg-1.png)

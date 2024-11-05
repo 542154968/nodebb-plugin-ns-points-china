@@ -3,7 +3,8 @@
 const async = require("async");
 
 const nodebb = require("./nodebb"),
-  constants = require("./constants");
+  constants = require("./constants"),
+  { formatDate } = require("./utils");
 
 const db = nodebb.db,
   user = nodebb.user;
@@ -69,7 +70,7 @@ dataBase.incrementBy = function (uid, increment, done) {
  * @param {string} uid
  * @param {number} points
  * @param {number} countPoints
- * @param {'post' | 'topic' | 'unvote' | 'upvote'} from 来源
+ * @param {'post' | 'topic' | 'unvote' | 'upvote' | 'signIn'} from 来源
  */
 dataBase.addPointsChangeLog = (uid, points, countPoints, from) => {
   const logData = {
@@ -164,6 +165,76 @@ dataBase.countSet = async (set, limit) => {
     }
   );
   return count;
+};
+
+/**
+ * 查询用户今日签到情况
+ * @param {*} uid
+ * @param {*} date
+ * @returns {Promise<number>}
+ */
+dataBase.getUserSignInStatusByDate = async (uid, date = new Date()) => {
+  const NAME_SPCAE = `${constants.SIGN_IN_DATE_NAMESPACE}:${formatDate(
+    date,
+    "yyyyMMdd"
+  )}`;
+
+  // sortedSetRangeWithScores 获取集合
+  // sortedSetScore 获取单个值
+  const list = await db.getSortedSetRevRangeWithScores(NAME_SPCAE, -0, -1);
+  // 倒序排列 获取顺位
+  list.reverse();
+  const index = list.findIndex(item => {
+    try {
+      const data = JSON.parse(item.value);
+      return data.userId === uid;
+    } catch (error) {
+      return false;
+    }
+  });
+  return index;
+};
+
+/**
+ * 签到
+ * @param {*} uid
+ * @returns
+ */
+dataBase.signIn = async uid => {
+  const date = new Date();
+  const signInData = {
+    // 时间
+    timestamp: date.getTime(),
+    // 用户id
+    userId: uid,
+  };
+  const stringSignInData = JSON.stringify(signInData);
+  await Promise.all([
+    // 记录这天的签到用户
+    db.sortedSetAdd(
+      `${constants.SIGN_IN_DATE_NAMESPACE}:${formatDate(date, "yyyyMMdd")}`,
+      signInData.timestamp,
+      stringSignInData
+    ),
+
+    // 记录用户共签到了哪些
+    db.sortedSetAdd(
+      `${constants.SIGN_IN_USER_NAMESPACE}:${uid}`,
+      signInData.timestamp,
+      formatDate(date, "yyyy-MM-dd")
+    ),
+  ]);
+};
+
+/**
+ * 查询用户签到日期列表
+ * @param {*} uid
+ * @returns
+ */
+dataBase.getUserSignInDates = async uid => {
+  const NAME_SPCAE = `${constants.SIGN_IN_USER_NAMESPACE}:${uid}`;
+  const list = await db.getSortedSetRevRangeWithScores(NAME_SPCAE, -0, -1);
+  return list.map(item => item.value);
 };
 
 module.exports = dataBase;

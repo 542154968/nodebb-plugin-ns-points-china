@@ -84,6 +84,88 @@
         );
     }
   });
+
+  hooks.on("action:app.load", () => {
+    if (app.user.uid > 0) {
+      handleGetUserSignInStatus();
+    }
+  });
+
+  /**
+   * 获取用户今日签到状态
+   */
+  function handleGetUserSignInStatus() {
+    $.ajax({
+      url: "/api/signIn/getUserStatus",
+      method: "GET",
+      dataType: "json",
+      success: function (data) {
+        if (!data) {
+          return;
+        }
+        $("#panel .brand-container > div").append(getSignBtnDom(data));
+      },
+    });
+  }
+
+  /**
+   * 点击签到
+   * @param {*} data
+   * @returns
+   */
+  function getSignBtnDom(data) {
+    var isSignIn = data.isSignIn;
+    var index = data.index;
+    var isDisabled = isSignIn ? " disabled " : "";
+    var btnText = isSignIn ? "已签到" : "签到";
+
+    if (isSignIn) {
+      return (
+        '<span class="d-flex align-items-center" style="margin-left: auto; color: #999; font-size: 12px">今日第' +
+        index +
+        "名签到</span>"
+      );
+    } else {
+      var signInBtn = $(
+        "<button " +
+          isDisabled +
+          ' style="margin-left: auto" type="button" class="btn btn-primary" id="sign-in-btn">' +
+          btnText +
+          "</button>"
+      ).click(handleSignIn);
+      return signInBtn;
+    }
+  }
+
+  function handleSignIn() {
+    var signInBtn = $("#sign-in-btn");
+    signInBtn.prop("disabled", true);
+    $.ajax({
+      url: "/api/signIn",
+      method: "GET",
+      dataType: "json",
+      success: function (data) {
+        signInBtn.attr("disabled", false);
+        if (!data) {
+          return;
+        }
+
+        if (data.status) {
+          var pointsMsg = settingData.baseSignInPoints
+            ? "+" + settingData.baseSignInPoints + "积分！"
+            : "";
+          alerts.success(data.msg + pointsMsg, 3000);
+        } else {
+          alerts.warning(data.msg, 3000);
+        }
+        signInBtn.remove();
+        $("#panel .brand-container > div").append(getSignBtnDom(data));
+      },
+      error: function () {
+        signInBtn.prop("disabled", false);
+      },
+    });
+  }
 })();
 
 /**

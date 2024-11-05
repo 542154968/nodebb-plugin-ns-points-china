@@ -33,6 +33,10 @@ class PageRanking extends React.Component {
         title: "基础增长",
         hint: "每提升一个等级所需额外的积分",
       },
+      baseSignInPoints: {
+        title: "签到积分",
+        hint: "签到获取的积分",
+      },
     };
 
     this.saveHandler = e =>

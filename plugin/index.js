@@ -7,7 +7,9 @@ const actions = require("./actions"),
   settings = require("./settings"),
   sockets = require("./sockets"),
   Ranking = require("./default-ranking");
+
 const pointsConrtoller = require("../controller/points");
+const signInConrtoller = require("../controller/signIn");
 
 const plugin = {};
 //NodeBB list of Hooks: https://github.com/NodeBB/NodeBB/wiki/Hooks
@@ -50,6 +52,20 @@ plugin.hooks = {
       router.get(
         "/api/points-log-user",
         pointsConrtoller.renderClientUserPointsPage
+      );
+
+      router.get(
+        "/api/signIn/getUserStatus",
+        middleware.applyCSRF,
+        middleware.requireUser,
+        signInConrtoller.getUserSignInStatus
+      );
+
+      router.get(
+        "/api/signIn",
+        middleware.applyCSRF,
+        middleware.requireUser,
+        signInConrtoller.signIn
       );
 
       async.parallel(
