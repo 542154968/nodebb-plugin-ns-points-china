@@ -18,6 +18,7 @@ Additional metrics for User Profiles. It's like experience in video games. Plugi
 ![演示1](./readme-static/eg.png)
 ![演示2](./readme-static/eg-1.png)
 ![演示3](./readme-static/eg-2.png)
+![演示4](./readme-static/eg-3.png)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
