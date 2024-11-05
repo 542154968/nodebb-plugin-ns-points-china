@@ -20,6 +20,15 @@ dataBase.getPoints = function (uid, done) {
   db.sortedSetScore(constants.NAMESPACE, uid, done);
 };
 
+/**
+ *  获取用户排名 从高到低
+ * @param {*} uid
+ * @returns
+ */
+dataBase.getUserPointsRank = function (uid) {
+  return db.sortedSetRevRank(constants.NAMESPACE, uid);
+};
+
 dataBase.getUsers = function (limit, done) {
   async.waterfall(
     [

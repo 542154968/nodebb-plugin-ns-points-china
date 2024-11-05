@@ -29,11 +29,20 @@ const pointsConrtoller = {
    * @param {*} next
    */
   renderClientPoinstsOverviewPage: async (req, res, next) => {
-    controller.getTopUsers(function (error, payload) {
+    controller.getTopUsers(async function (error, data) {
       if (error) {
         return res.status(500).json(error);
       }
-      res.render("points/overview", payload);
+      // 如果用户存在 查询用户排名
+      if (req.uid) {
+        // 查出来从0开始
+        data.rank = await controller.getUserPointsRank(req.uid);
+        if (typeof data.rank === "number") {
+          data.rank += 1;
+        }
+      }
+      // data.user 是模板
+      res.render("points/overview", data);
     });
   },
   /**

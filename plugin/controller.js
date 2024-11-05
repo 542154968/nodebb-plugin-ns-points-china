@@ -224,4 +224,16 @@ controller.getUserSignInDates = async uid => {
   return await database.getUserSignInDates(uid);
 };
 
+/**
+ * 获取用户积分排名
+ * @param {*} uid
+ * @returns
+ */
+controller.getUserPointsRank = async uid => {
+  if (!uid) {
+    return Promise.reject("没有实际用户存在");
+  }
+  return await database.getUserPointsRank(uid);
+};
+
 module.exports = controller;
