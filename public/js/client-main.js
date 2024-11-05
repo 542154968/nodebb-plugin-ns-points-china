@@ -129,7 +129,7 @@
       var signInBtn = $(
         "<button " +
           isDisabled +
-          ' style="margin-left: auto" type="button" class="btn btn-primary" id="sign-in-btn">' +
+          ' style="margin-left: auto; height: 42px" type="button" class="btn btn-primary align-self-center" id="sign-in-btn">' +
           btnText +
           "</button>"
       ).click(handleSignIn);
